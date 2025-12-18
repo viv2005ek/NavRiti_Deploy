@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import AppNavbar from "../components/AppNavbar.tsx";
 
-const SERVER_BASE = import.meta.env.VITE_SERVER_BASE_API ?? "";
+const SERVER_BASE = import.meta.env.VITE_SERVER_BASE_API;
 
 type PayloadShape = {
   parent_id?: string;

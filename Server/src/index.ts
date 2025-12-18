@@ -55,6 +55,7 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // ---------------- Public Auth Routes ----------------
 app.use('/api/auth', authRouter);
 

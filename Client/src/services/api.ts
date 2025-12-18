@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const TOKEN_STORAGE_KEY = 'authToken';
 
-const baseURL = import.meta.env.VITE_API_BASE_URL || '/api';
+const baseURL = import.meta.env.VITE_API_BASE_URL ;
 
 // Debug logs removed for production
 // Uncomment below for debugging:

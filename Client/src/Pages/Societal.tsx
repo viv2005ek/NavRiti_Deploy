@@ -64,7 +64,7 @@ const likertOptions: { value: number; label: string }[] = [
   { value: 5, label: "Strongly Agree" }
 ];
 
-const SERVER_BASE = import.meta.env.VITE_SERVER_BASE_API ?? '';
+const SERVER_BASE = import.meta.env.VITE_SERVER_BASE_API;
 const API_ROUTE = `${SERVER_BASE}/societal/analyze`;
 
 const CareerSurveyForm: React.FC = () => {
