@@ -1,18 +1,17 @@
 // src/util/swagger.ts
-import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerJSDoc, { Options } from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import path from 'path';
 
 const apiServerUrl = process.env.SWAGGER_SERVER_URL ?? 'http://localhost:8000/api';
 
-const options: swaggerJsdoc.Options = {
+const options: Options = {
   definition: {
     openapi: '3.0.0',
     info: {
       title: 'Naviriti — Backend API',
       version: '1.0.0',
-      description:
-        ''
+      description: ''
     },
     servers: [{ url: apiServerUrl }],
     components: {
@@ -32,14 +31,14 @@ const options: swaggerJsdoc.Options = {
   ]
 };
 
-export const swaggerSpec = swaggerJsdoc(options);
+export const swaggerSpec = swaggerJSDoc(options);
 export const swaggerUiServe = swaggerUi.serve;
 
 /**
- * Custom Swagger UI setup with proper request interception
+ * Custom Swagger UI setup with request interception
  */
-export const swaggerUiSetup = (spec: any) => {
-  return swaggerUi.setup(spec, {
+export const swaggerUiSetup = (spec: unknown) =>
+  swaggerUi.setup(spec, {
     explorer: true,
     swaggerOptions: {
       persistAuthorization: true,
@@ -47,28 +46,21 @@ export const swaggerUiSetup = (spec: any) => {
       docExpansion: 'none',
       filter: true,
       requestInterceptor: (request: any) => {
-        console.log('[SWAGGER INTERCEPTOR] Original request headers:', JSON.stringify(request.headers));
-        
-        // Swagger UI uses capital 'A' Authorization
-        if (request.headers.Authorization) {
-          let token = request.headers.Authorization;
-          
-          // Clean up token
-          token = String(token).trim();
+        if (request.headers?.Authorization) {
+          let token = String(request.headers.Authorization).trim();
+
           if (token.startsWith('<') && token.endsWith('>')) {
             token = token.slice(1, -1).trim();
           }
+
           if (token.toLowerCase().startsWith('bearer ')) {
             token = token.slice(7).trim();
           }
-          
-          // Set both cases to ensure compatibility
+
           request.headers.Authorization = `Bearer ${token}`;
           request.headers.authorization = `Bearer ${token}`;
-          
-          console.log('[SWAGGER INTERCEPTOR] Modified auth header:', request.headers.authorization);
         }
-        
+
         return request;
       }
     },
@@ -81,7 +73,5 @@ export const swaggerUiSetup = (spec: any) => {
       .swagger-ui .btn.authorize svg { fill: white; }
       .swagger-ui .auth-wrapper { padding: 10px; }
     `,
-    customSiteTitle: 'Naviriti API Docs',
-    customJs: '/swagger-custom.js'
+    customSiteTitle: 'Naviriti API Docs'
   });
-};

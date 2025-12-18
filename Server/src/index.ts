@@ -31,31 +31,14 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
       'http://127.0.0.1:3000',
     ];
 
+// ---------------- CORS (ALLOW ALL) ----------------
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (isDevelopment) {
-      // In development, allow localhost origins
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(null, true); // Allow all in dev
-      }
-    } else {
-      // In production, only allow specific origins
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'), false);
-      }
-    }
-  },
-  credentials: true,
-  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  origin: true,            // reflect request origin
+  credentials: true,       // allow cookies / auth headers
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 
 app.use(express.json());
 
